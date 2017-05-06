@@ -27,9 +27,11 @@
 
 
     <script>
-  //  var socket = io();
+    var socket = io("localhost:8080");
     function loadQuestion(newQuestion){
-        var question = JSON.parse(newQuestion);
+        console.log(newQuestion);
+        //var question = JSON.parse(newQuestion);
+        var question = newQuestion;
         var answers = '<ol class="divAnswers">\
         <li><button class="answer1" id="answer1">'+ question.answers[0] +'</button></li>\
         <li><button class="answer2" id="answer2">'+ question.answers[1] +'</button></li>\
@@ -49,19 +51,23 @@
         });
         var registerObject = [];
 
-      //  socket.emit('register',{
-   //                 "id" : localStorage.id,
-    //                "username" : localStorage.username,
-    //                "contry" : localStorage.country
-    //                });
+       socket.emit('register',{
+                   "id" : localStorage.id,
+                   "username" : localStorage.username,
+                    "contry" : localStorage.country
+                    });
     }
                     
 
-         //   socket.on('newQuestion',loadQuestion(newQuestion));
+            socket.on('newQuestion',loadQuestion);
         
     if(localStorage.username == null){
         $("#country").countrySelect();
     }
+        
+        $("#buttonRegister").click(function(){
+            register();
+        });
     </script>
 </body>
 </html>

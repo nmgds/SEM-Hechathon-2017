@@ -5,6 +5,8 @@ var mongo = require('./server/mongo.js')
 
 var app = express()
 
+app.use(express.static('client'));
+
 app.get('/', function (req, res) {
     res.send("SEM Hackathon 2017")
 })
@@ -17,7 +19,9 @@ io.on('connection', function (client) {
     console.log("A new client has connected...");
 
     client.on('register', function (data) {
-        mongo.saveUser(JSON.stringify(user));
+        console.log("user tried to register");
+        //mongo.saveUser(JSON.stringify(user));
+       
     });
 
     client.on('answer', function (data) {
