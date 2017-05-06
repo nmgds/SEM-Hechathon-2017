@@ -15,14 +15,6 @@ app.listen(3000, function () {
     console.log("Server started on port 3000.")
 })
 
-var question =  {
-    country:"Iran",
-        id: 1,
-        question:  "Capital of Ukraine", 
-        answers: ["1", "2", "Minsk", "Moscow"],
-        rightAnswer: "2"
-    };
-
 io.on('connection', function (client) {
     console.log("A new client has connected...");
 

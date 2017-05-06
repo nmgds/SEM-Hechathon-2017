@@ -22,7 +22,10 @@ const RoundSchema = new mongoose.Schema({
         }
     }],
     info: {
-        type: String
+        yearJoined: {type:String},
+        participatedTimes: {type:Number},
+        noWins: {type:Number},
+        voters: {type:Number}
     }
 })
 
