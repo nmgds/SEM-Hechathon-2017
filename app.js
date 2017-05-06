@@ -18,6 +18,9 @@ app.get('/client', function (req, res) {
     res.sendFile(path.join(__dirname + '/client/client.html'))
 })
 
+app.get('/eurostaff', function (req, res) {
+    res.sendFile(path.join(__dirname + '/client/eurostaff.html'))
+})
 
 
 app.listen(3000, function () {
