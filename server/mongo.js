@@ -81,6 +81,8 @@ function getUserScores(user){
     
 }
 
+/**
+
 function checkAnswer(country, questionID, answer){
     Round.find({country:country, questions.id:questionID}, function(err, data){
         if(err){
@@ -100,7 +102,7 @@ function checkAnswer(country, questionID, answer){
     });
 }
 
-
+*/
 exports.getQuestion = getQuestion
 exports.getUserAnswers = getUserAnswers
 exports.saveUser = saveUser
