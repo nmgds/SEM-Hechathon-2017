@@ -33,7 +33,7 @@ io.on('connection', function (client) {
             answer: answerData.answer,
             timeRemaining: answerData.timeRemaining
         };
-        mongo.addAnswer(JSON.stringify(finalAnswer), answerData.userId);
+        mongo.addAnswer(finalAnswer, answerData.userId);
         var s = 100;
         client.emit('score', s);
     });
@@ -59,6 +59,10 @@ io.on('connection', function (client) {
         });
 
     });
-
-
+    
+    client.on('scores', function(data){
+       mongo.getAllUsers(function(users){
+           io.socket.emit('scoreboard', users);
+       }) 
+    });
 });
