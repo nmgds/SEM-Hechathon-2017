@@ -74,6 +74,8 @@ function getQuestion(country, ack) {
         if (err) {
             console.log(err);
         } else {
+            console.log(country);
+            console.log(data);
             ack(data[0].questions[0],country);
         }
     })

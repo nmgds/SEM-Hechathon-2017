@@ -25,6 +25,9 @@
     <!----------HERE STARTS SCRIPT------->
 
     <script>
+    var question = JSON.parse('{ "id" : 1, "question" : "What is the capital of Ukraine?",\
+            "answers":["Minsk","Belarus", "Moscow", "Kiev"],"rightAnswer" : "Kiev", "country":"IRAN"}');
+
     var socket = io("localhost:8080");
     function loadQuestion(newQuestion){
         clearPage();
@@ -37,32 +40,42 @@
         <li><button class="answer4" id="answer3">'+ question.answers[3] +'</button></li>\
         </ol>';
         $('#answersContainer').append(answers);
-        
-        var seconds = setInterval(addTimer(15,newQuestion),1000);
+        //fix
+        addTimer(5,newQuestion);
         
         $('#questionContainer').append('<h1>'+ question.question +'</h1>');
         $('#answer' + 0).click(function(){
-            sendAnswer(newQuestion, question.answers[0],seconds);
+            sendAnswer(newQuestion, question.answers[0],$('#seconds').val());
         });
         $('#answer' + 1).click(function(){
-            sendAnswer(newQuestion, question.answers[1],seconds);
+            sendAnswer(newQuestion, question.answers[1],$('#seconds').val());
         });
         $('#answer' + 2).click(function(){
-            sendAnswer(newQuestion, question.answers[2],seconds);
+            sendAnswer(newQuestion, question.answers[2],$('#seconds').val());
         });
         $('#answer' + 3).click(function(){
-            sendAnswer(newQuestion, question.answers[3],seconds);
+            sendAnswer(newQuestion, question.answers[3],$('#seconds').val());
         });
 
     }
 
     function addTimer(counter,newQuestion){
-        $("#answersContainer").append("<h2>"+counter+"</h2>");
-        counter = counter - 1;
-        if(counter < 0){
-            sendAnswer(newQuestion,"",0);
-        }
-        return counter;
+        var seconds = counter;
+        $("#answersContainer").append('<div id="secondsContainer"></div>');
+        $("#secondsContainer").append("<h2>"+seconds+"</h2>");
+        var timer = setInterval(function(){
+            seconds = seconds - 1;
+            console.log(seconds);
+            if(seconds === -1){
+                clearInterval(timer);
+                if(newQuestion != ""){
+                sendAnswer(newQuestion,"timeout",-1);
+                }
+            }
+            $("#secondsContainer").empty();
+            $("#secondsContainer").append("<h2>"+seconds+"</h2>");
+
+        }, 1000);
     }
         
     function sendAnswer(newQuestion,answer,timeRemaining){
@@ -74,10 +87,12 @@
             "timeRemaining": timeRemaining,
             "userId" : localStorage.id            
         });
-        if(timeRemaining >= 0){
-            waitingScreen(1,newQuestion.rightAnswer,answer,timeRemaining);
-        }else{
+        if(timeRemaining < 0){
+            if(answer === "timeout"){
             waitingScreen(2,newQuestion.rightAnswer,answer,timeRemaining);
+            }
+        }else{
+            waitingScreen(1,newQuestion.rightAnswer,answer,timeRemaining);
         }
         
     }
@@ -101,7 +116,8 @@
                    "id" : localStorage.id,
                    "username" : localStorage.username,
                    "contry" : localStorage.country,
-                   "answers" : []
+                   "answers" : [],
+                   "score"  :0
                     });
 
         waitingScreen(0,"","",0);
@@ -117,7 +133,7 @@
                 break;
             case 1:
                 $('#questionContainer').append('<h1> Waiting for others </h1>');
-                var seconds = setInterval(addTimer(timeRemaining,""),1000);
+                var seconds = addTimer(timeRemaining + 5,"");
                 clearPage();
                 if(answeredCorrectly === true){
                     $('#questionContainer').append('<h1> You answered correctly </h1>');
@@ -134,6 +150,8 @@
             case 2:
                 $('#questionContainer').append('<h1> Ran out of time! </h1>');
                 $('#answersContainer').append('<img src="https://media0.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"></img>');
+                addTimer(5,"");
+                
                 socket.on('score',function(scores){
                     waitingScreen(3,"",scores,0);
                 });
@@ -149,6 +167,7 @@
         
     }
         
+    /**
 
     if(localStorage.username === null){
         $("#country").countrySelect();
@@ -159,6 +178,12 @@
     $("#buttonRegister").click(function(){
         register();
     });
+    */
+        loadQuestion(question);
+        
+    
+    
+    
     </script>
 </body>
 </html>
