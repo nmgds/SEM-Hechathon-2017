@@ -35,10 +35,10 @@
         <li><button class="answer2" id="answer1">'+ question.answers[1] +'</button></li>\
         <li><button class="answer3" id="answer2">'+ question.answers[2] +'</button></li>\
         <li><button class="answer4" id="answer3">'+ question.answers[3] +'</button></li>\
-        </ol>'
+        </ol>';
         $('#answersContainer').append(answers);
         
-        var seconds = setInterval(addTimer(15),1000);
+        var seconds = setInterval(addTimer(15,newQuestion),1000);
         
         $('#questionContainer').append('<h1>'+ question.question +'</h1>');
         $('#answer' + 0).click(function(){
@@ -56,8 +56,8 @@
 
     }
 
-    function addTimer(counter){
-        $("#answersContainer").append("<h2>"+counter"+</h2>");
+    function addTimer(counter,newQuestion){
+        $("#answersContainer").append("<h2>"+counter+"</h2>");
         counter = counter - 1;
         if(counter < 0){
             sendAnswer(newQuestion,"",0);
@@ -65,9 +65,8 @@
         return counter;
     }
         
- function sendAnswer(newQuestion,answer,timeRemaining){
-        var question = newQuestion;
-        var final answer = answer;
+    function sendAnswer(newQuestion,answer,timeRemaining){
+       var question = newQuestion;
        socket.emit('answer',{
             "country" : newQuestion.country,
             "questionId" : newQuestion.id,
@@ -105,22 +104,22 @@
                    "answers" : []
                     });
 
-        waitingScreen();
+        waitingScreen(0,"","",0);
     }
     
     function waitingScreen(number,rightAnswer,answer,timeRemaining){
         clearPage();
-        var answeredCorrectly = (rightAnswer == answer);
+        var answeredCorrectly = (rightAnswer === answer);
         switch (number){
             case 0:
-                $('#questionContainer').append('<h1> Waiting for others </h1>');
+                $('#questionContainer').append('<h1> Please wait </h1>');
                 $('#answersContainer').append('<img src="https://media0.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"></img>');
                 break;
             case 1:
                 $('#questionContainer').append('<h1> Waiting for others </h1>');
-                var seconds = setInterval(addTimer(timeRemaining),1000);
+                var seconds = setInterval(addTimer(timeRemaining,""),1000);
                 clearPage();
-                if(answeredCorrectly == true){
+                if(answeredCorrectly === true){
                     $('#questionContainer').append('<h1> You answered correctly </h1>');
                     $('#answersContainer').append('<p>You answered: ' + rightAnswer + '</p>');
                 }else{
@@ -143,14 +142,18 @@
                 $('#questionContainer').append('<h1>Wait for next question!</h1>');
                 $('#answersContainer').append("<p>You're place number: " + answer + "</p>");
                 socket.on('newQuestion',loadQuestion);
-                break;                    
+                break;
+            default:
+                break;
         }
         
     }
         
 
-    if(localStorage.username == null){
+    if(localStorage.username === null){
         $("#country").countrySelect();
+    }else{
+        waitingScreen(0,"","",0);
     }
         
     $("#buttonRegister").click(function(){
