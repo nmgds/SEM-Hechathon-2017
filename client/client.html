@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eurovision 2017 Quiz</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="socket.io.js"></script>
+    <link rel="stylesheet" href="./css/countrySelect.css">
+    
+    <script src="./js/countrySelect.min.js"></script>
+
+    
+</head>
+<body>
+    <div id></div>
+    <div id="questionContainer">
+        <h1 id=questionPlace>Enter your name!</h1>
+    </div>
+    <div id="answersContainer">
+        <input type="text" id="username"></input>
+        <input type="text" id="country"></input>
+    </div>
+    <button id=buttonRegister>Register</button>
+
+
+
+
+
+
+    <script>
+  //  var socket = io();
+    function loadQuestion(newQuestion){
+        var question = JSON.parse(newQuestion);
+        var answers = '<ol class="divAnswers">\
+        <li><button class="answer1" id="answer1">'+ question.answers[0] +'</button></li>\
+        <li><button class="answer2" id="answer2">'+ question.answers[1] +'</button></li>\
+        <li><button class="answer3" id="answer3">'+ question.answers[2] +'</button></li>\
+        <li><button class="answer4" id="answer4">'+ question.answers[3] +'</button></li>\
+    </ol>'
+        
+        $('#answersContainer').append(answers);
+        $('#questionContainer').append('<h1>'+ question.question +'</h1>');
+    }
+
+    function register(){
+        localStorage.username = $("#username").val();
+        localStorage.id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+        });
+        var registerObject = [];
+
+      //  socket.emit('register',{
+   //                 "id" : localStorage.id,
+    //                "username" : localStorage.username,
+    //                "contry" : localStorage.country
+    //                });
+    }
+                    
+
+         //   socket.on('newQuestion',loadQuestion(newQuestion));
+        
+    if(localStorage.username == null){
+        $("#country").countrySelect();
+    }
+    </script>
+</body>
+</html>
