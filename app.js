@@ -77,7 +77,7 @@ io.on('connection', function (client) {
            io.socket.emit('scoreboard', users);
        }) 
     });
-   })    
+       
 
     client.on('test', function(){
         console.log('app testing')
