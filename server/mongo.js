@@ -11,7 +11,6 @@ const RoundSchema = new mongoose.Schema({
         answers: [{type:String}],
         rightAnswer: {type: String}
     }],
-    answer: {type: String},
     info: {type: String}
 })
 
@@ -22,7 +21,8 @@ const UserSchema = new mongoose.Schema({
     answers: [{
         country: {type: String}, 
         questionId: {type: Number}, 
-        answer: {type: String}
+        answer: {type: String},
+        timeRemaining: {type: Number}
     }]
 })
 
@@ -72,6 +72,30 @@ function addAnswer(data, user){
     User.update({id: user}, {"$push": {"answers": data}}, function(err){
         if(err){
             console.log(err);
+        }
+    });
+}
+
+function getUserScores(user){
+    
+    
+}
+
+function checkAnswer(country, questionID, answer){
+    Round.find({country:country, questions.id:questionID}, function(err, data){
+        if(err){
+            console.log(err);
+        }
+        else{
+            if(data[0].questions.rightAnswer.equals(answer)){
+                //answer was right
+                return true;
+            }
+            else{
+                //answer was wrong
+                return false;
+                }
+            
         }
     });
 }

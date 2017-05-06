@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eurovision 2017 Staff panel</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="socket.io.js"></script>
+    <script src="./js/countrySelect.min.js"></script>
+    <link rel="stylesheet" href="./css/countrySelect.min.css">
+</head>
+<body>
+    
+    <div id="countryList">
+        
+    </div>
+
+
+
+    <script>
+    var socket = io("localhost:8080");
+    
+        function sendQuestionAnswer(country){
+           socket.emit('question', country);
+        }
+        function requestInfo(country){
+            socket.emit('info', country);
+        }
+        function showScore(country){
+            socket.emit('scores', country);
+        }
+        
+        var countryList = ["Armenia", "Australia", "Austria", "Azerbaijan", "Belgiun", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "France", "Georgia", "Germany", "Hungary", "Israel", "Italy", "Latvia", "Lithuania", "Malta", "Netherlands", "Poland", "Russia", "Serbia", "Spain", "Sweden", "Ukraine", "United Kingdom"];
+        
+        var list = "";
+        for(var i=0; i<countryList.length; i++){
+            var country=countryList[i];
+            list = list + '<ol>'+i+'. '+country+'<button id="q'+country+'">Question</button></div><button id="i'+country+'">Info</button></div><button id="s'+country+'">Score</button></ol>';
+        }
+        
+        $("#countryList").append(list);
+        $.each(countryList, function(index, value){
+            var country = value;
+            console.log(country);
+            $("#q"+country).click(function(){
+               sendQuestionAnswer(country); 
+            });
+            $("#i"+country).click(function(){
+               requestInfo(country); 
+            });
+            $("#s"+country).click(function(){
+               showScore(country); 
+            });
+        });
+        
+    </script>
+</body>
+</html>
