@@ -18,6 +18,7 @@ const RoundSchema = new mongoose.Schema({
 const UserSchema = new mongoose.Schema({
     id: {type: String},
     username: {type:String},
+    country: {type:String},
     answers: [{
         country: {type: String}, 
         questionId: {type: Number}, 
@@ -57,5 +58,21 @@ var getUserAnswers = (username) => {
     })
 }
 
+function saveUser(data){
+    var user = new User(data);
+    user.save(function(err){
+        if(err){
+            console.log(err);
+        }
+    })
+}
+
+function addAnswer(data, user){
+    User.update({username: user}, {"$push": {"answers": data.answer}});
+}
+
+
 exports.getQuestion = getQuestion
 exports.getUserAnswers = getUserAnswers
+exports.saveUser = saveUser
+exports.addAnswer = addAnswer

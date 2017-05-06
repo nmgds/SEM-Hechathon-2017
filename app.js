@@ -17,7 +17,7 @@ io.on('connection', function (client) {
     console.log("A new client has connected...");
 
     client.on('register', function (data) {
-        console.log(data);
+        mongo.saveUser(JSON.stringify(user));
     });
 
     client.on('answer', function (data) {
