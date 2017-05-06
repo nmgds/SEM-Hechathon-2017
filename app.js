@@ -1,4 +1,5 @@
 var express = require('express')
+var path = require('path')
 var io = require('socket.io')(8080);
 
 var mongo = require('./server/mongo.js')
@@ -7,9 +8,20 @@ var app = express()
 
 app.use(express.static('client'));
 
+
+
 app.get('/', function (req, res) {
-    res.send("SEM Hackathon 2017")
+    res.sendFile(path.join(__dirname + '/client/home.html'))
 })
+
+app.get('/client', function (req, res) {
+    res.sendFile(path.join(__dirname + '/client/client.html'))
+})
+
+app.get('/eurostaff', function (req, res) {
+    res.sendFile(path.join(__dirname + '/client/eurostaff.html'))
+})
+
 
 app.listen(3000, function () {
     console.log("Server started on port 3000.")
@@ -65,4 +77,11 @@ io.on('connection', function (client) {
            io.socket.emit('scoreboard', users);
        }) 
     });
+   })    
+
+    client.on('test', function(){
+        console.log('app testing')
+        client.emit('scoreboard', [{rank: 1, name: 2, country: 3, score: 4}, {rank: 5, name: 6, country: 7, score: 8}])
+    })
+    
 });
