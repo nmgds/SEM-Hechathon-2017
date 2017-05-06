@@ -20,34 +20,45 @@ io.on('connection', function (client) {
 
     client.on('register', function (data) {
         console.log("A new user has registered.");
-        mongo.saveUser(data);       
+        mongo.saveUser(data);
     });
 
     client.on('answer', function (data) {
-        console.log(data);
-        var answerData = JSON.parse(data);
+        //console.log(data);
+        //var answerData = JSON.parse(data);
+        var answerData = data;
         var finalAnswer = {
-        country: answerData.country, 
-        questionId: answerData.questionId, 
-        answer: answerData.answer
-    };
-        mongo.addAnswer(JSON.stringify(finalAnswer), answerData.userId)
-        
+            country: answerData.country,
+            questionId: answerData.questionId,
+            answer: answerData.answer,
+            timeRemaining: answerData.timeRemaining
+        };
+        mongo.addAnswer(JSON.stringify(finalAnswer), answerData.userId);
+        var s = 100;
+        client.emit('score', s);
     });
 
     client.on('question', function (data) {
-        mongo.getQuestion(data, function(question){
+        mongo.getQuestion(data, function (question, country) {
+            var q = {
+                country: country,
+                questionId: question.id,
+                question: question.question,
+                answers: question.answers,
+                rightAnswer: question.rightAnswer
+            }
+
             console.log("Sending a new question.");
-        io.sockets.emit('newQuestion', question);
-        });   
+            io.sockets.emit('newQuestion', q);
+        });
     });
-    
-    client.on('info', function(data){
-       mongo.getInfo(data, function(info){
-            client.emit('sendInfo', info);   
-       });
-        
+
+    client.on('info', function (data) {
+        mongo.getInfo(data, function (info) {
+            client.emit('sendInfo', info);
+        });
+
     });
-    
-    
+
+
 });
