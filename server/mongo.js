@@ -22,10 +22,18 @@ const RoundSchema = new mongoose.Schema({
         }
     }],
     info: {
-        yearJoined: {type:String},
-        participatedTimes: {type:Number},
-        noWins: {type:Number},
-        voters: {type:Number}
+        yearJoined: {
+            type: String
+        },
+        participatedTimes: {
+            type: Number
+        },
+        noWins: {
+            type: Number
+        },
+        voters: {
+            type: Number
+        }
     }
 })
 
@@ -59,15 +67,17 @@ const UserSchema = new mongoose.Schema({
 const Round = mongoose.model('Round', RoundSchema)
 const User = mongoose.model('User', UserSchema)
 
-function getQuestion(country) {
+function getQuestion(country, ack) {
     Round.find({
-            country: country
-        }, function (err, data) {
-            if (err) {
-                console.log(err);
-            } else return data[0].questions[0];
+        country: country
+    }, function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            ack(data[0].questions[0]);
         }
-    )};
+    })
+};
 
 
 function saveUser(data) {
@@ -94,12 +104,22 @@ function addAnswer(data, user) {
     });
 }
 
+function getInfo(country, ack) {
+    Round.find({
+        country: country
+    }, function (err, data) {
+        if (err) {
+            console.log(err);
+        } else ack(data[0].info);
+    })
+};
+
 function getUserScores(user) {
 
 
 }
 /*
-/**
+
 
 function checkAnswer(country, questionID, answer){
     Round.find({country:country, questions.id:questionID}, function(err, data){
@@ -120,7 +140,8 @@ function checkAnswer(country, questionID, answer){
     });
 }
 */
-*/
+
 exports.getQuestion = getQuestion
+exports.getInfo = getInfo
 exports.saveUser = saveUser
 exports.addAnswer = addAnswer

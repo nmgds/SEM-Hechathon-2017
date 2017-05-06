@@ -20,9 +20,7 @@ io.on('connection', function (client) {
 
     client.on('register', function (data) {
         console.log("A new user has registered.");
-        mongo.saveUser(data);
-        client.emit("newQuestion", question);
-       
+        mongo.saveUser(data);       
     });
 
     client.on('answer', function (data) {
@@ -38,8 +36,17 @@ io.on('connection', function (client) {
     });
 
     client.on('question', function (data) {
-        var question = mongo.getQuestion(data);        
-        client.broadcast.emit('newQuestion', question);
+        mongo.getQuestion(data, function(question){
+            console.log("Sending a new question.");
+        io.sockets.emit('newQuestion', question);
+        });   
+    });
+    
+    client.on('info', function(data){
+       mongo.getInfo(data, function(info){
+            client.emit('sendInfo', info);   
+       });
+        
     });
     
     
