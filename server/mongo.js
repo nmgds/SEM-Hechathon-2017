@@ -60,8 +60,9 @@ const UserSchema = new mongoose.Schema({
         timeRemaining: {
             type: Number
         }
-    }]
-})
+    }],
+    score: {type: Number}
+});
 
 
 const Round = mongoose.model('Round', RoundSchema)
@@ -117,8 +118,22 @@ function getInfo(country, ack) {
 };
 
 function getUserScores(user) {
+    User.find({
+        username: user
+    }, function (err, data) {
+        if (err) {
+            console.log(err);
+        } else ack(data[0].score);
+    })
 
+}
 
+function getAllUsers(ack){
+    Users.find({}, function(err, data){
+         if (err) {
+            console.log(err);
+        } else ack(data);
+    });
 }
 /*
 
