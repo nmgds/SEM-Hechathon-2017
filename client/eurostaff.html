@@ -1,55 +1,77 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Eurovision 2017 Staff panel</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="socket.io.js"></script>
     <script src="./js/countrySelect.min.js"></script>
-    <link rel="stylesheet" href="./css/countrySelect.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+    <link rel="stylesheet" href="css/countrySelect.css">
+
 </head>
+
 <body>
-    
-    <div id="countryList">
-        
+    <div class="container">
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Country</th>
+                    <th>Question</th>
+                    <th>Info</th>
+                    <th>Scoreboard</th>
+                </tr>
+            </thead>
+            <tbody id="countryList">
+
+            </tbody>
+        </table>
+
     </div>
 
 
-
     <script>
-    var socket = io("localhost:8080");
-    
-        function sendQuestionAnswer(country){
-           socket.emit('question', country);
+        var socket = io("localhost:8080");
+
+        function sendQuestionAnswer(country) {
+            socket.emit('question', country);
         }
-        function requestInfo(country){
+
+        function requestInfo(country) {
             socket.emit('info', country);
         }
-        function showScore(country){
+
+        function showScore(country) {
             socket.emit('scores', country);
         }
-        
+
         var countryList = ["Armenia", "Australia", "Austria", "Azerbaijan", "Belgiun", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "France", "Georgia", "Germany", "Hungary", "Israel", "Italy", "Latvia", "Lithuania", "Malta", "Netherlands", "Poland", "Russia", "Serbia", "Spain", "Sweden", "Ukraine", "United Kingdom"];
-        
+        var countryPrefix = ["am", "au", "at", "az", "be", "bg", "hr", "cy", "cz", "fr", "ge","de","hu", "il", "it", "lv", "lt", "mt", "nl", "pl", "ru", "rs", "es", "se", "ua", "gb"];
+
         var list = "";
-        for(var i=0; i<countryList.length; i++){
-            var country=countryList[i];
-            list = list + '<ol>'+i+'. '+country+'<button id="q'+country+'">Question</button></div><button id="i'+country+'">Info</button></div><button id="s'+country+'">Score</button></ol>';
+        for (var i = 0; i < countryList.length; i++) {
+            var country = countryList[i];
+            var countryFlag = countryPrefix[i];
+            list = list + '<tr><td>' + i + '</td><td><div class="country-select"><div class="flag '+countryFlag+'"></div></div></td><td>' + country + '</td><td><a class="waves-effect waves-light btn" id="q' + country + '">Question</a></td><td><a class="waves-effect waves-light btn" id="i' + country + '">Info</a></td><td><a class="waves-effect waves-light btn" id="s' + country + '">Score</a></td></tr>';
         }
-        
+
         $("#countryList").append(list);
-        $.each(countryList, function(index, value){
+        $.each(countryList, function(index, value) {
             var country = value;
-            $("#q"+country).click(function(){
-               sendQuestionAnswer(country); 
+            $("#q" + country).click(function() {
+                sendQuestionAnswer(country);
             });
-            $("#i"+country).click(function(){
-               requestInfo(country); 
+            $("#i" + country).click(function() {
+                requestInfo(country);
             });
-            $("#s"+country).click(function(){
-               showScore(country); 
+            $("#s" + country).click(function() {
+                showScore(country);
             });
         });
-        
+
     </script>
 </body>
+
 </html>
