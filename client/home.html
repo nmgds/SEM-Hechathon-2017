@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Eurovision 2017 Quiz</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="socket.io.js"></script>
+        <!-- <script src="./js/materialize.min.js"></script> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+        <link rel="stylesheet" href="./css/home.css">
+    </head>
+    <body>
+        <button onclick="test()">Test</button>
+
+        <div>
+           <iframe class="Stream" allowfullscreen frameborder="0"
+                src="//www.youtube.com/embed/no1v1-2HZ6g??rel=0?version=3&autoplay=1&controls=0&&showinfo=0&loop=1​&controls=0&fs=0&iv_load_policy=3&modestbranding=1&showinfo=0">
+            </iframe>
+        </div>
+
+        <div class="container">
+            
+             <div id="Info" class="row">
+                <div class="col s6">
+                     <table id="info-board" class="bordered">
+                        <thead>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Country</th>
+                            <th>Score</th>
+                        </thead>
+                        <tbody id="info-able-body">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ScoreBoard" class="row">
+                <div class="col s12">
+                     <table id="score-board" class="bordered">
+                        <thead>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Country</th>
+                            <th>Score</th>
+                        </thead>
+                        <tbody id="score-table-body">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            var socket = io("localhost:8080")
+
+            socket.on("scoreboard", showScoreBoard)
+
+            function test(){
+                socket.emit('test')
+                console.log("testing")
+            }
+
+            function showScoreBoard(data){
+                $('#ScoreBoard').css("visibility", "visible");
+                data.forEach(function(player){
+                    $('#score-table-body').append('<tr><td>' + player.rank + '</td><td>' + player.name + '</td><td>' + player.country + '</td><td>' + player.score + '</td>')
+                })
+            }
+
+        </script>
+
+
+    </body>
+</html>
