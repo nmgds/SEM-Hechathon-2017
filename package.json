@@ -1,0 +1,22 @@
+{
+  "name": "semhackathon2017",
+  "version": "0.0.1",
+  "description": "SEM Hackathon 2017 webapp",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nmgds/SEM-Hechathon-2017.git"
+  },
+  "author": "",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/nmgds/SEM-Hechathon-2017/issues"
+  },
+  "homepage": "https://github.com/nmgds/SEM-Hechathon-2017#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
