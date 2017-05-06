@@ -39,7 +39,6 @@
         $("#countryList").append(list);
         $.each(countryList, function(index, value){
             var country = value;
-            console.log(country);
             $("#q"+country).click(function(){
                sendQuestionAnswer(country); 
             });

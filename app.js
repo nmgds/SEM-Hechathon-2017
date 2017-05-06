@@ -46,9 +46,8 @@ io.on('connection', function (client) {
     });
 
     client.on('question', function (data) {
-        
-        
-        client.broadcast.emit('newQuestion', data);
+        var question = mongo.getQuestion(data);        
+        client.broadcast.emit('newQuestion', question);
     });
     
     

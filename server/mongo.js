@@ -4,25 +4,51 @@ mongoose.connect('mongodb://localhost/hack')
 mongoose.set('debug', true)
 
 const RoundSchema = new mongoose.Schema({
-    country: {type: String},
+    country: {
+        type: String
+    },
     questions: [{
-        id: {type: Number},
-        question:  {type: String}, 
-        answers: [{type:String}],
-        rightAnswer: {type: String}
+        id: {
+            type: Number
+        },
+        question: {
+            type: String
+        },
+        answers: [{
+            type: String
+        }],
+        rightAnswer: {
+            type: String
+        }
     }],
-    info: {type: String}
+    info: {
+        type: String
+    }
 })
 
 const UserSchema = new mongoose.Schema({
-    id: {type: String},
-    username: {type:String},
-    country: {type:String},
+    id: {
+        type: String
+    },
+    username: {
+        type: String
+    },
+    country: {
+        type: String
+    },
     answers: [{
-        country: {type: String}, 
-        questionId: {type: Number}, 
-        answer: {type: String},
-        timeRemaining: {type: Number}
+        country: {
+            type: String
+        },
+        questionId: {
+            type: Number
+        },
+        answer: {
+            type: String
+        },
+        timeRemaining: {
+            type: Number
+        }
     }]
 })
 
@@ -30,57 +56,46 @@ const UserSchema = new mongoose.Schema({
 const Round = mongoose.model('Round', RoundSchema)
 const User = mongoose.model('User', UserSchema)
 
-var getQuestion = (country) => {
-    return new Promise((accept, reject) => {
-    	Round.find({country: country}, (err, round) => {
-    		if (err){
-    			console.log(err)
-    			accept()
-    		}
-    		else {
-    			accept(round.question)
-    		}
-    	})
-    })
-}
+function getQuestion(country) {
+    Round.find({
+            country: country
+        }, function (err, data) {
+            if (err) {
+                console.log(err);
+            } else return data[0].questions[0];
+        }
+    )};
 
-var getUserAnswers = (username) => {
-    return new Promise((accept, reject) => {
-        User.find({username: username}, (err, user) => {
-            if(err){
-                console.log(err)
-                accept()
-            }
-            else{
-                accept(user.answers)
-            }
-        })
-    })
-}
 
-function saveUser(data){
+function saveUser(data) {
     var user = new User(data);
-    user.save(function(err){
-        if(err){
+    user.save(function (err) {
+        if (err) {
             console.log(err);
         }
     })
 }
 
-function addAnswer(data, user){
+function addAnswer(data, user) {
     console.log(user);
-    User.update({id: user}, {"$push": {"answers": data}}, function(err){
-        if(err){
+    User.update({
+        id: user
+    }, {
+        "$push": {
+            "answers": data
+        }
+    }, function (err) {
+        if (err) {
             console.log(err);
         }
     });
 }
 
-function getUserScores(user){
-    
-    
-}
+function getUserScores(user) {
 
+
+}
+/*
 function checkAnswer(country, questionID, answer){
     Round.find({country:country, questions.id:questionID}, function(err, data){
         if(err){
@@ -99,9 +114,8 @@ function checkAnswer(country, questionID, answer){
         }
     });
 }
-
+*/
 
 exports.getQuestion = getQuestion
-exports.getUserAnswers = getUserAnswers
 exports.saveUser = saveUser
 exports.addAnswer = addAnswer
