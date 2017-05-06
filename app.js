@@ -19,13 +19,20 @@ io.on('connection', function (client) {
     console.log("A new client has connected...");
 
     client.on('register', function (data) {
-        console.log("user tried to register");
-        //mongo.saveUser(JSON.stringify(user));
+        console.log("A new user has registered.");
+        mongo.saveUser(data);
        
     });
 
     client.on('answer', function (data) {
-        console.log(data);
+        var answerData = JSON.parse(data);
+        var finalAnswer = {
+        country: answerData.country, 
+        questionId: answerData.questionId, 
+        answer: answerData.answer
+    };
+        mongo.addAnswer(finalAnswer, answerData.userId)
+        
     });
 
     client.on('question', function (data) {
