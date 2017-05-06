@@ -68,7 +68,12 @@ function saveUser(data){
 }
 
 function addAnswer(data, user){
-    User.update({username: user}, {"$push": {"answers": data.answer}});
+    console.log(user);
+    User.update({id: user}, {"$push": {"answers": data}}, function(err){
+        if(err){
+            console.log(err);
+        }
+    });
 }
 
 
