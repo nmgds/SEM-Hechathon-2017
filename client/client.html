@@ -144,7 +144,7 @@
         var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
         return v.toString(16);
         });
-        localStorage.country = $("#country").countrySelect("getSelectedCountryData").name;
+        localStorage.country = $("#country").countrySelect("getSelectedCountryData").iso2;
         var registerObject = [];
 
        socket.emit('register',{
