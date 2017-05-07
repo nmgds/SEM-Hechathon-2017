@@ -36,7 +36,8 @@ io.on('connection', function (client) {
     });
 
     client.on('answer', function (data) {
-        //console.log(data);
+        console.log("Received answer from " + data.userId);
+        console.log("received:" + JSON.stringify(data));
         //var answerData = JSON.parse(data);
         var answerData = data;
         var finalAnswer = {
@@ -45,20 +46,20 @@ io.on('connection', function (client) {
             answer: answerData.answer,
             timeRemaining: answerData.timeRemaining
         };
+        console.log(finalAnswer);
         mongo.addAnswer(finalAnswer, answerData.userId);
-        
-        
+
+
         //calculate and return the score
-        mongo.getQuestion(answerData.country, function(question){
-            if(question.rightAnswer === answerData.answer){
-               //question is right, update the score
-               var addedScore = calculateScore(answerData.timeRemaining);
+        mongo.getQuestion(answerData.country, function (question) {
+            if (question.rightAnswer === answerData.answer) {
+                //question is right, update the score
+                var addedScore = calculateScore(answerData.timeRemaining);
                 mongo.updateUserScore(answerData.userId, addedScore);
-                client.emit('score', addedScore);       
-               }
-               else{
+                client.emit('score', addedScore);
+            } else {
                 //do nothing, +0 points
-               }
+            }
         });
     });
 
@@ -82,24 +83,37 @@ io.on('connection', function (client) {
             client.emit('sendInfo', info);
         });
     });
-    
-    client.on('scores', function(data){
-       mongo.getAllUsers(function(users){
-           console.log("Sending current scores.");
-           io.socket.emit('scoreboard', users);
-       }) 
-    });
-       
 
-    client.on('test', function(){
+    client.on('scores', function (data) {
+        mongo.getAllUsers(function (users) {
+            console.log("Sending current scores.");
+            io.socket.emit('scoreboard', users);
+        })
+    });
+
+
+    client.on('test', function () {
         console.log('app testing')
-        client.emit('scoreboard', [{rank: 1, name: 2, country: 3, score: 4}, {rank: 5, name: 6, country: 7, score: 8}])
+        client.emit('scoreboard', [{
+            rank: 1,
+            name: 2,
+            country: 3,
+            score: 4
+        }, {
+            rank: 5,
+            name: 6,
+            country: 7,
+            score: 8
+        }])
     })
 });
 
-function calculateScore(timeRemaining){
-    var base = 1000;
+function calculateScore(timeRemaining) {
     var multiplier = 50;
-    var bonus= multiplier * timeRemaining;
-    return base+bonus;
+    var bonus = 0;
+    var base = 1000;
+    if (timeRemaining > 0) {
+        bonus = multiplier * timeRemaining;
+    }
+    return base + bonus;
 }

@@ -121,7 +121,7 @@ function getInfo(country, ack) {
 
 function getUserScore(user, ack) {
     User.find({
-        username: user
+        id: user
     }, function (err, data) {
         if (err) {
             console.log(err);
