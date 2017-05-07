@@ -12,12 +12,18 @@
         <button onclick="test()">Test</button>
 
         <div>
-           <iframe class="Stream" allowfullscreen frameborder="0"
-                src="//www.youtube.com/embed/no1v1-2HZ6g??rel=0?version=3&autoplay=1&controls=0&&showinfo=0&loop=1​&controls=0&fs=0&iv_load_policy=3&modestbranding=1&showinfo=0">
+           <iframe class="Stream" id="Stream" allowfullscreen frameborder="0"
+                src="//www.youtube.com/embed/no1v1-2HZ6g??rel=0?version=3&autoplay=1&start=&controls=0&&showinfo=0&loop=1​&controls=0&fs=0&iv_load_policy=3&modestbranding=1&showinfo=0">
             </iframe>
         </div>
 
         <div class="container">
+
+              <div id="Question" class="row">
+                <div class="col s10">
+                     <h4 id="question-text">This is the questin: what bear is best?</h4>
+                </div>
+            </div>
             
              <div id="Info" class="row">
                 <div class="col s5">
@@ -46,10 +52,18 @@
 
 
         <script>
+
+            var url = "//www.youtube.com/embed/no1v1-2HZ6g??rel=0?version=3&autoplay=1&start=&controls=0&&showinfo=0&loop=1​&controls=0&fs=0&iv_load_policy=3&modestbranding=1&showinfo=0"
+
+            function jumpTime(time){
+                $('#Stream').attr("src", "//www.youtube.com/embed/no1v1-2HZ6g??rel=0?version=3&autoplay=1&start=" + time + "&controls=0&&showinfo=0&loop=1​&controls=0&fs=0&iv_load_policy=3&modestbranding=1&showinfo=0")
+            }
+
             var socket = io("localhost:8080")
 
             socket.on("scoreboard", showScoreBoard)
             socket.on("info", showInfo)
+            socket.on("newQuestion", showQuestion)
 
             function test(){
                 socket.emit('test')
@@ -69,6 +83,15 @@
              function showInfo(data){
                 $('#Info').css("visibility", "visible");
                 $('#info-list').append('<li class="collection-item">' + data.yearJoined + '</li><li class="collection-item">' + data.participatedTimes + '</li><li class="collection-item">' + data.noWins + '</li><li class="collection-item">' + data.voters + '</li>')
+
+                setTimeout(function(){
+                    $('#Info').css("visibility", "hidden");
+                }, 5000)
+            }
+
+            function showQuestion(question){
+                $('#Question').css("visibility", "visible");
+                $('#question-text').text(question)
 
                 setTimeout(function(){
                     $('#Info').css("visibility", "hidden");

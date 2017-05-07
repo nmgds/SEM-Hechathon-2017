@@ -22,11 +22,9 @@
     </div>
 
 
-    <!----------HERE STARTS SCRIPT------->
-
     <script>
-    var question = JSON.parse('{ "id" : 1, "question" : "What is the capital of Ukraine?",\
-            "answers":["Minsk","Belarus", "Moscow", "Kiev"],"rightAnswer" : "Kiev", "country":"IRAN"}');
+    //var question = JSON.parse('{ "id" : 1, "question" : "What is the capital of Ukraine?",\
+     //       "answers":["Minsk","Belarus", "Moscow", "Kiev"],"rightAnswer" : "Kiev", "country":"IRAN"}');
 
     var socket = io("localhost:8080");
     function loadQuestion(newQuestion){
@@ -130,6 +128,7 @@
             case 0:
                 $('#questionContainer').append('<h1> Please wait </h1>');
                 $('#answersContainer').append('<img src="https://media0.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"></img>');
+                socket.on('newQuestion',loadQuestion);
                 break;
             case 1:
                 $('#questionContainer').append('<h1> Waiting for others </h1>');
@@ -167,9 +166,8 @@
         
     }
         
-    /**
 
-    if(localStorage.username === null){
+    if(localStorage.username === null || localStorage.username == undefined){
         $("#country").countrySelect();
     }else{
         waitingScreen(0,"","",0);
@@ -178,9 +176,9 @@
     $("#buttonRegister").click(function(){
         register();
     });
-    */
-        loadQuestion(question);
-        
+   //     loadQuestion(question);
+                console.log(localStorage.username);
+
     
     
     

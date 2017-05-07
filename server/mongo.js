@@ -131,7 +131,7 @@ function getUserScore(user, ack) {
 }
 
 function getAllUsers(ack) {
-    Users.find({}, function (err, data) {
+    User.find({}, function (err, data) {
         if (err) {
             console.log(err);
         } else ack(data);
