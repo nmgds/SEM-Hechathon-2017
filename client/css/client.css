@@ -28,7 +28,12 @@ h1 {
 	margin-top: 30px;
 }
 
-#username {
+input[type="text"]{
+	font-size: 40px;
+	text-align: center;
+}
+
+/* #username {
 	height: 100px;
 	width: 500px;
 	font-size: 50px;
@@ -41,4 +46,4 @@ h1 {
 	width: 500px;
 	font-size: 50px;
 	margin-top: 30px;
-	background-color: gray;
+	background-color: gray; */
