@@ -120,12 +120,11 @@ function getUserScore(user, ack) {
             console.log(err);
         } else ack(data[0].score);
     })
-
 }
 
 function getAllUsers(ack) {
-    User.find({}, function (err, data) {
-        if (err) {
+    User.find({},[], {sort:{score:-1}, limit:5},function(err, data){
+        if(err) {
             console.log(err);
         } else ack(data);
     });

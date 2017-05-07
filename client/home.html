@@ -9,8 +9,6 @@
         <link rel="stylesheet" href="./css/home.css">
     </head>
     <body>
-        <button onclick="test()">Test</button>
-
         <div>
            <iframe class="Stream" id="Stream" allowfullscreen frameborder="0"
                 src="//www.youtube.com/embed/no1v1-2HZ6g??rel=0?version=3&autoplay=1&start=&controls=0&&showinfo=0&loop=1​&controls=0&fs=0&iv_load_policy=3&modestbranding=1&showinfo=0">
@@ -19,10 +17,8 @@
 
         <div class="container">
 
-              <div id="Question" class="row">
-                <div class="col s10">
+              <div id="Question" class="container">
                      <h4 id="question-text"></h4>
-                </div>
             </div>
             
              <div id="Info" class="row">
@@ -65,15 +61,11 @@
             socket.on("info", showInfo)
             socket.on("newQuestion", showQuestion)
 
-            function test(){
-                socket.emit('test')
-                console.log("testing")
-            }
-
             function showScoreBoard(data){
                 $('#ScoreBoard').css("visibility", "visible");
-                data.forEach(function(player){
-                    $('#score-table-body').append('<tr><td>' + player.rank + '</td><td>' + player.name + '</td><td>' + player.country + '</td><td>' + player.score + '</td>')
+                $('#score-table-body').html('');
+                $(data).each(function(i){
+                    $('#score-table-body').append('<tr><td>' + (i+1) + '</td><td>' + this.username + '</td><td>' + this.country + '</td><td>' + this.score + '</td>')
                 })
                 setTimeout(function(){
                     $('#ScoreBoard').css("visibility", "hidden");
@@ -94,7 +86,7 @@
                 $('#question-text').text(question.question)
 
                 setTimeout(function(){
-                    $('#Info').css("visibility", "hidden");
+                    $('#Question').css("visibility", "hidden");
                 }, 5000)
             }
 

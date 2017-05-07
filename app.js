@@ -32,23 +32,20 @@ io.on('connection', function (client) {
 
     client.on('register', function (data) {
         console.log("A new user has registered.");
+        console.log(data);
         mongo.saveUser(data);
     });
 
     client.on('answer', function (data) {
         console.log("Received answer from " + data.userId);
-        console.log("received:" + JSON.stringify(data));
         //var answerData = JSON.parse(data);
         var answerData = data;
         var finalAnswer = {
             country: answerData.country,
-            questionId: answerData.questionId,
             answer: answerData.answer,
             timeRemaining: answerData.timeRemaining
         };
-        console.log(finalAnswer);
         mongo.addAnswer(finalAnswer, answerData.userId);
-
 
         //calculate and return the score
         mongo.getQuestion(answerData.country, function (question) {
@@ -81,25 +78,10 @@ io.on('connection', function (client) {
     client.on('scores', function (data) {
         mongo.getAllUsers(function (users) {
             console.log("Sending current scores.");
-            io.socket.emit('scoreboard', users);
+            console.log(users);
+            io.sockets.emit('scoreboard', users);
         })
     });
-
-
-    client.on('test', function () {
-        console.log('app testing')
-        client.emit('scoreboard', [{
-            rank: 1,
-            name: 2,
-            country: 3,
-            score: 4
-        }, {
-            rank: 5,
-            name: 6,
-            country: 7,
-            score: 8
-        }])
-    })
 });
 
 function calculateScore(timeRemaining) {
