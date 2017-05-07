@@ -21,7 +21,7 @@
 
               <div id="Question" class="row">
                 <div class="col s10">
-                     <h4 id="question-text">This is the questin: what bear is best?</h4>
+                     <h4 id="question-text"></h4>
                 </div>
             </div>
             
@@ -91,7 +91,7 @@
 
             function showQuestion(question){
                 $('#Question').css("visibility", "visible");
-                $('#question-text').text(question)
+                $('#question-text').text(question.question)
 
                 setTimeout(function(){
                     $('#Info').css("visibility", "hidden");
