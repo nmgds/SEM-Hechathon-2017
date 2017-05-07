@@ -83,6 +83,10 @@ io.on('connection', function (client) {
             io.sockets.emit('scoreboard', users);
         })
     });
+    
+    client.on('requestJump', function(data){
+        io.sockets.emit('jump', data);
+    });
 });
 
 function calculateScore(timeRemaining) {

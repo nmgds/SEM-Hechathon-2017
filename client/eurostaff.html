@@ -35,7 +35,7 @@
     <script>
         
     var socket = io("leia.skip.chalmers.se:8080");
-      // var socket = io("localhost:8080");
+    //  var socket = io("localhost:8080");
         function sendQuestionAnswer(country) {
             socket.emit('question', country);
         }
@@ -45,7 +45,8 @@
         }
         
         function jumpTime(time){
-            io.sockets.emit('jump', time);
+            console.log(time);
+            socket.emit('requestJump', time);
         }
 
         function showScore(country) {
@@ -57,7 +58,7 @@
         
         var countryListShort = ["Azerbaijan", "Belgium", "Ukraine"];
         var countryPrefixShort = ["az", "be", "ua"];
-        var countryTimeShort = [1687, 985, 6016]
+        var countryTimeShort = [1687, 979, 6016]
 
         var list = "";
         for (var i = 0; i < countryListShort.length; i++) {
@@ -67,7 +68,7 @@
         }
 
         $("#countryList").append(list);
-        $.each(countryList, function(index, value) {
+        $.each(countryListShort, function(index, value) {
             var country = value;
             $("#q" + country).click(function() {
                 sendQuestionAnswer(country);
