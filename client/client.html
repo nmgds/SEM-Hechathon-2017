@@ -23,10 +23,6 @@
 
 
     <script>
-    var question = JSON.parse('{ "id" : 1, "question" : "What is the capital of Ukraine?",\
-            "answers":["Minsk","Belarus", "Moscow", "Kiev"],"rightAnswer" : "Kiev", "country":"IRAN"}');
-
-        
     var timerCounter = 0;
     var answeredQuestion = false;
     var socket = io("localhost:8080");
@@ -96,7 +92,6 @@
         console.log(response);
        socket.emit('answer',{
             "country" : newQuestion.country,
-            "questionId" : newQuestion.id,
             "answer" : answer,
             "timeRemaining": timeRemaining,
             "userId" : localStorage.id            
@@ -142,6 +137,7 @@
     function waitingScreen(number,rightAnswer,answer,timeRemaining){
         clearPage();
         var answeredCorrectly = (rightAnswer === answer);
+        socket.on('newQuestion',loadQuestion);
         switch (number){
             case 0:
                 $('#questionContainer').append('<h1> Please wait </h1>');
@@ -182,7 +178,6 @@
             case 3:
                 $('#questionContainer').append('<h1>Wait for next question!</h1>');
                 $('#answersContainer').append("<p>You're place number: " + answer + "</p>");
-                socket.on('newQuestion',loadQuestion);
                 break;
             default:
                 break;
@@ -190,9 +185,9 @@
         
     }
         
-    /**
+    
 
-    if(localStorage.username === null){
+    if(localStorage.username === null || localStorage.username === undefined){
         $("#country").countrySelect();
     }else{
         waitingScreen(0,"","",0);
@@ -200,11 +195,7 @@
         
     $("#buttonRegister").click(function(){
         register();
-    });
-    */
-        loadQuestion(question);
-        
-    
+    });    
     
     
     </script>

@@ -65,15 +65,9 @@ io.on('connection', function (client) {
 
     client.on('question', function (data) {
         mongo.getQuestion(data, function (question, country) {
-            var q = {
-                country: country,
-                questionId: question.id,
-                question: question.question,
-                answers: question.answers,
-                rightAnswer: question.rightAnswer
-            }
+            console.log(question);
             console.log("Sending a new question.");
-            io.sockets.emit('newQuestion', q);
+            io.sockets.emit('newQuestion', question);
         });
     });
 
