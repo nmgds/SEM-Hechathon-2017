@@ -426,8 +426,8 @@
                         $('#questionContainer').append('<h1> You answered correctly </h1>');
                         $('#answersContainer').append('<p>You answered: ' + rightAnswer + '</p>');
                     }else{
-                        $('#questionContainer').append('<h1> Maybe next time </h1>');
-                        $('#answersContainer').append('<p>The answer was' + rightAnswer +'</p>\
+                        $('#questionContainer').append('<h1> WRONG </h1>');
+                        $('#answersContainer').append('<p>The answer was: ' + rightAnswer +'</p>\
                                                       <p>You answered: ' + answer + '</p>');
                     }
                 },timeRemaining * 1000);
@@ -442,7 +442,7 @@
                 
             case 3:
                 $('#questionContainer').append('<h1>Wait for next question!</h1>');
-                $('#answersContainer').append("<p>You're place number: " + answer + "</p>");
+                $('#answersContainer').append("<p>You got : " + answer + " points! </p>");
                 break;
             default:
                 break;
