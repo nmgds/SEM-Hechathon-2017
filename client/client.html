@@ -24,7 +24,8 @@
 
     <script>
     
-    var socket = io("leia.skip.chalmers.se:8080");
+    //var socket = io("leia.skip.chalmers.se:8080");
+        var socket = io("localhost:8080");
         
     socket.on('score',function(scores){
         setTimeout(function(){
@@ -50,7 +51,7 @@
         </ol>';
         $('#answersContainer').append(answers);
         //fix
-        addTimer(5,newQuestion);
+        addTimer(15,newQuestion);
         
         $('#questionContainer').append('<h1>'+ question.question +'</h1>');
         $('#answer' + 0).click(function(){
@@ -72,6 +73,7 @@
         timerCounter = counter;
         $("#answersContainer").append('<div id="secondsContainer"></div>');
         $("#secondsContainer").append("<h2 id='seconds'>"+timerCounter+"</h2>");
+        console.log("running timer");
         var timer = setInterval(function(){
             timerCounter = timerCounter - 1;
             console.log(timerCounter);
@@ -147,12 +149,10 @@
     function waitingScreen(number,rightAnswer,answer,timeRemaining){
         clearPage();
         var answeredCorrectly = (rightAnswer === answer);
-        socket.on('newQuestion',loadQuestion);
         switch (number){
             case 0:
                 $('#questionContainer').append('<h1> Please wait </h1>');
                 $('#answersContainer').append('<img src="https://media0.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"></img>');
-                socket.on('newQuestion',loadQuestion);
                 break;
             case 1:
                 $('#questionContainer').append('<h1> Waiting for others </h1>');

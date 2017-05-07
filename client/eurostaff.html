@@ -33,8 +33,9 @@
 
 
     <script>
-        var socket = io("leia.skip.chalmers.se:8080");
-
+        
+    var socket = io("leia.skip.chalmers.se:8080");
+    //    var socket = io("localhost:8080");
         function sendQuestionAnswer(country) {
             socket.emit('question', country);
         }
