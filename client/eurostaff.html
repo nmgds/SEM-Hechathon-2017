@@ -64,7 +64,7 @@
         for (var i = 0; i < countryListShort.length; i++) {
             var country = countryListShort[i];
             var countryFlag = countryPrefixShort[i];
-            list = list + '<tr><td>' + i + '</td><td><div class="country-select"><div class="flag '+countryFlag+'"></div></div></td><td>' + country + '</td><td><a class="waves-effect waves-light btn" id="q' + country + '">Question</a></td><td><a class="waves-effect waves-light btn" id="j' + country + '">Jump</a></td><td><a class="waves-effect waves-light btn" id="s' + country + '">Score</a></td></tr>';
+            list = list + '<tr><td>' + i + '</td><td>'+country+'</td><td>' + country + '</td><td><a class="waves-effect waves-light btn" id="q' + country + '">Question</a></td><td><a class="waves-effect waves-light btn" id="j' + country + '">Jump</a></td><td><a class="waves-effect waves-light btn" id="s' + country + '">Score</a></td></tr>';
         }
 
         $("#countryList").append(list);
