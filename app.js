@@ -50,7 +50,7 @@ io.on('connection', function (client) {
         
         //calculate and return the score
         mongo.getQuestion(answerData.country, function(question){
-            if(question.rightAnswer.equals(answerData.answer)){
+            if(question.rightAnswer === answerData.answer){
                //question is right, update the score
                var addedScore = calculateScore(answerData.timeRemaining);
                 mongo.updateUserScore(answerData.userId, addedScore);
@@ -60,9 +60,6 @@ io.on('connection', function (client) {
                 //do nothing, +0 points
                }
         });
-            
-    
-        
     });
 
     client.on('question', function (data) {
@@ -74,7 +71,6 @@ io.on('connection', function (client) {
                 answers: question.answers,
                 rightAnswer: question.rightAnswer
             }
-
             console.log("Sending a new question.");
             io.sockets.emit('newQuestion', q);
         });
@@ -85,7 +81,6 @@ io.on('connection', function (client) {
             console.log("Sending country information.");
             client.emit('sendInfo', info);
         });
-
     });
     
     client.on('scores', function(data){
@@ -100,7 +95,6 @@ io.on('connection', function (client) {
         console.log('app testing')
         client.emit('scoreboard', [{rank: 1, name: 2, country: 3, score: 4}, {rank: 5, name: 6, country: 7, score: 8}])
     })
-    
 });
 
 function calculateScore(timeRemaining){
