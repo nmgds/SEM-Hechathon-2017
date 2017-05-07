@@ -23,11 +23,11 @@
 
 
     <script>
-    //var question = JSON.parse('{ "id" : 1, "question" : "What is the capital of Ukraine?",\
-     //       "answers":["Minsk","Belarus", "Moscow", "Kiev"],"rightAnswer" : "Kiev", "country":"IRAN"}');
-
+    var timerCounter = 0;
+    var answeredQuestion = false;
     var socket = io("localhost:8080");
     function loadQuestion(newQuestion){
+        answeredQuestion = false;
         clearPage();
         console.log(newQuestion);
         var question = newQuestion;
@@ -43,52 +43,65 @@
         
         $('#questionContainer').append('<h1>'+ question.question +'</h1>');
         $('#answer' + 0).click(function(){
-            sendAnswer(newQuestion, question.answers[0],$('#seconds').val());
+            sendAnswer(newQuestion, question.answers[0],timerCounter);
         });
         $('#answer' + 1).click(function(){
-            sendAnswer(newQuestion, question.answers[1],$('#seconds').val());
+            sendAnswer(newQuestion, question.answers[1],timerCounter);
         });
         $('#answer' + 2).click(function(){
-            sendAnswer(newQuestion, question.answers[2],$('#seconds').val());
+            sendAnswer(newQuestion, question.answers[2],timerCounter);
         });
         $('#answer' + 3).click(function(){
-            sendAnswer(newQuestion, question.answers[3],$('#seconds').val());
+            sendAnswer(newQuestion, question.answers[3],timerCounter);
         });
 
     }
 
     function addTimer(counter,newQuestion){
-        var seconds = counter;
+        timerCounter = counter;
         $("#answersContainer").append('<div id="secondsContainer"></div>');
-        $("#secondsContainer").append("<h2>"+seconds+"</h2>");
+        $("#secondsContainer").append("<h2 id='seconds'>"+counter+"</h2>");
         var timer = setInterval(function(){
-            seconds = seconds - 1;
-            console.log(seconds);
-            if(seconds === -1){
+            counter = counter - 1;
+            console.log(counter);
+            if(counter <= 0){
                 clearInterval(timer);
-                if(newQuestion != ""){
-                sendAnswer(newQuestion,"timeout",-1);
-                }
+                $("#seconds").innerHTML = counter;
+                if(!answeredQuestion){
+                    sendAnswer(newQuestion,"timeout",-1);
+                }    
             }
             $("#secondsContainer").empty();
-            $("#secondsContainer").append("<h2>"+seconds+"</h2>");
+            $("#secondsContainer").append("<h2 id='seconds'>"+counter+"</h2>");
 
         }, 1000);
     }
         
     function sendAnswer(newQuestion,answer,timeRemaining){
+        if(answer != "timeout"){
+            answeredQuestion = true;
+        }
        var question = newQuestion;
-       socket.emit('answer',{
+        var response = {
             "country" : newQuestion.country,
             "questionId" : newQuestion.id,
             "answer" : answer,
             "timeRemaining": timeRemaining,
             "userId" : localStorage.id            
+        };
+        console.log(response);
+       socket.emit('answer',{
+            "country" : newQuestion.country,
+            "answer" : answer,
+            "timeRemaining": timeRemaining,
+            "userId" : localStorage.id            
         });
-        if(timeRemaining < 0){
-            if(answer === "timeout"){
+        
+        
+        
+        
+        if(timeRemaining < 0 && answer === "timeout"){
             waitingScreen(2,newQuestion.rightAnswer,answer,timeRemaining);
-            }
         }else{
             waitingScreen(1,newQuestion.rightAnswer,answer,timeRemaining);
         }
@@ -124,6 +137,7 @@
     function waitingScreen(number,rightAnswer,answer,timeRemaining){
         clearPage();
         var answeredCorrectly = (rightAnswer === answer);
+        socket.on('newQuestion',loadQuestion);
         switch (number){
             case 0:
                 $('#questionContainer').append('<h1> Please wait </h1>');
@@ -132,33 +146,39 @@
                 break;
             case 1:
                 $('#questionContainer').append('<h1> Waiting for others </h1>');
-                var seconds = addTimer(timeRemaining + 5,"");
-                clearPage();
-                if(answeredCorrectly === true){
-                    $('#questionContainer').append('<h1> You answered correctly </h1>');
-                    $('#answersContainer').append('<p>You answered: ' + rightAnswer + '</p>');
-                }else{
-                    $('#questionContainer').append('<h1> Maybe next time </h1>');
-                    $('#answersContainer').append('<p>The answer was' + rightAnswer +'</p>\
-                                                  <p>You answered: ' + answer + '</p>');
-                }
-                socket.on('score',function(scores){
+                setTimeout(function(){
+                    clearPage();
+                    if(answeredCorrectly === true){
+                        $('#questionContainer').append('<h1> You answered correctly </h1>');
+                        $('#answersContainer').append('<p>You answered: ' + rightAnswer + '</p>');
+                    }else{
+                        $('#questionContainer').append('<h1> Maybe next time </h1>');
+                        $('#answersContainer').append('<p>The answer was' + rightAnswer +'</p>\
+                                                      <p>You answered: ' + answer + '</p>');
+                    }
+                },timeRemaining * 1000);
+                
+                setTimeout(function(){
+                    socket.on('score',function(scores){
                     waitingScreen(3,"",scores,0);
                 });
+                },5000);
                 break;
+
             case 2:
                 $('#questionContainer').append('<h1> Ran out of time! </h1>');
                 $('#answersContainer').append('<img src="https://media0.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"></img>');
-                addTimer(5,"");
                 
-                socket.on('score',function(scores){
+                setTimeout(function(){
+                    socket.on('score',function(scores){
                     waitingScreen(3,"",scores,0);
-                });
+                    });
+                },5000);
                 break;
+                
             case 3:
                 $('#questionContainer').append('<h1>Wait for next question!</h1>');
                 $('#answersContainer').append("<p>You're place number: " + answer + "</p>");
-                socket.on('newQuestion',loadQuestion);
                 break;
             default:
                 break;
@@ -166,8 +186,9 @@
         
     }
         
+    
 
-    if(localStorage.username === null || localStorage.username == undefined){
+    if(localStorage.username === null || localStorage.username === undefined){
         $("#country").countrySelect();
     }else{
         waitingScreen(0,"","",0);
@@ -175,11 +196,7 @@
         
     $("#buttonRegister").click(function(){
         register();
-    });
-   //     loadQuestion(question);
-                console.log(localStorage.username);
-
-    
+    });    
     
     
     </script>

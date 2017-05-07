@@ -7,20 +7,15 @@ const RoundSchema = new mongoose.Schema({
     country: {
         type: String
     },
-    questions: [{
-        id: {
-            type: Number
-        },
-        question: {
-            type: String
-        },
-        answers: [{
-            type: String
+    question: {
+        type: String
+    },
+    answers: [{
+        type: String
         }],
-        rightAnswer: {
-            type: String
-        }
-    }],
+    rightAnswer: {
+        type: String
+    },
     info: {
         yearJoined: {
             type: String
@@ -66,20 +61,18 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-
 const Round = mongoose.model('Round', RoundSchema)
 const User = mongoose.model('User', UserSchema)
 
 function getQuestion(country, ack) {
-    Round.find({
+    Round.findOne({
         country: country
     }, function (err, data) {
         if (err) {
             console.log(err);
         } else {
             console.log(country);
-            console.log(data);
-            ack(data[0].questions[0], country);
+            ack(data, country);
         }
     })
 };
@@ -110,18 +103,18 @@ function addAnswer(data, user) {
 }
 
 function getInfo(country, ack) {
-    Round.find({
+    Round.findOne({
         country: country
     }, function (err, data) {
         if (err) {
             console.log(err);
-        } else ack(data[0].info);
+        } else ack(data.info);
     })
 };
 
 function getUserScore(user, ack) {
     User.find({
-        username: user
+        id: user
     }, function (err, data) {
         if (err) {
             console.log(err);
