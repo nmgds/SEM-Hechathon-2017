@@ -60,6 +60,9 @@
             socket.on("scoreboard", showScoreBoard)
             socket.on("info", showInfo)
             socket.on("newQuestion", showQuestion)
+            socket.on("jump", function(time){
+                jumpTime(time)
+            })
 
             function showScoreBoard(data){
                 $('#ScoreBoard').css("visibility", "visible");

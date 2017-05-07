@@ -24,13 +24,13 @@
         
         <div id="answersContainer" class="row">
             <div>
-                <input type="text" id="username" class="defaultInput"></input>
+                <input type="text" id="username" placeholder="name" class="defaultInput"></input>
             </div>
             <div>
                 <input type="text" id="country" class="defaultInput"></input>
             </div>
             <div>
-                <button class="waves-effect waves-light btn" id=buttonRegister>Register</button>
+                <button class="waves-effect waves-light btn black" id=buttonRegister>Register</button>
             </div>
         </div>
 
@@ -166,7 +166,7 @@
         switch (number){
             case 0:
                 $('#questionContainer').append('<h1> Please wait </h1>');
-                $('#answersContainer').append('<img src="https://media0.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"></img>');
+                $('#answersContainer').append('<img id="gif" src="./img/load.gif"></img>');
                 break;
             case 1:
                 $('#questionContainer').append('<h1> Waiting for others </h1>');
@@ -187,7 +187,7 @@
 
             case 2:
                 $('#questionContainer').append('<h1> Ran out of time! </h1>');
-                $('#answersContainer').append('<img src="./img/load.gif"></img>');
+                $('#answersContainer').append('<img id="gif" src="./img/load.gif"></img>');
                 break;
                 
             case 3:
