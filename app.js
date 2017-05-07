@@ -46,8 +46,23 @@ io.on('connection', function (client) {
             timeRemaining: answerData.timeRemaining
         };
         mongo.addAnswer(finalAnswer, answerData.userId);
-        var s = 100;
-        client.emit('score', s);
+        
+        
+        //calculate and return the score
+        mongo.getQuestion(answerData.country, function(question){
+            if(question.rightAnswer.equals(answerData.answer)){
+               //question is right, update the score
+               var addedScore = calculateScore(answerData.timeRemaining);
+                mongo.updateUserScore(answerData.userId, addedScore);
+                client.emit('score', addedScore);       
+               }
+               else{
+                //do nothing, +0 points
+               }
+        });
+            
+    
+        
     });
 
     client.on('question', function (data) {
@@ -67,6 +82,7 @@ io.on('connection', function (client) {
 
     client.on('info', function (data) {
         mongo.getInfo(data, function (info) {
+            console.log("Sending country information.");
             client.emit('sendInfo', info);
         });
 
@@ -74,6 +90,7 @@ io.on('connection', function (client) {
     
     client.on('scores', function(data){
        mongo.getAllUsers(function(users){
+           console.log("Sending current scores.");
            io.socket.emit('scoreboard', users);
        }) 
     });
@@ -85,3 +102,10 @@ io.on('connection', function (client) {
     })
     
 });
+
+function calculateScore(timeRemaining){
+    var base = 1000;
+    var multiplier = 50;
+    var bonus= multiplier * timeRemaining;
+    return base+bonus;
+}
