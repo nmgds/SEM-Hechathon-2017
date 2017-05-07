@@ -38,7 +38,7 @@
 
     <script>
     
-    var socket = io("localhost:8080");
+    var socket = io("leia.skip.chalmers.se:8080");
         
     socket.on('score',function(scores){
         setTimeout(function(){
@@ -85,19 +85,19 @@
     function addTimer(counter,newQuestion){
         timerCounter = counter;
         $("#answersContainer").append('<div id="secondsContainer"></div>');
-        $("#secondsContainer").append("<h2 id='seconds'>"+counter+"</h2>");
+        $("#secondsContainer").append("<h2 id='seconds'>"+timerCounter+"</h2>");
         var timer = setInterval(function(){
-            counter = counter - 1;
-            console.log(counter);
-            if(counter <= 0){
+            timerCounter = timerCounter - 1;
+            console.log(timerCounter);
+            if(timerCounter <= 0){
                 clearInterval(timer);
-                $("#seconds").innerHTML = counter;
+                $("#seconds").innerHTML = timerCounter;
                 if(!answeredQuestion){
                     sendAnswer(newQuestion,"timeout",-1);
                 }    
             }
             $("#secondsContainer").empty();
-            $("#secondsContainer").append("<h2 id='seconds'>"+counter+"</h2>");
+            $("#secondsContainer").append("<h2 id='seconds'>"+timerCounter+"</h2>");
 
         }, 1000);
     }
@@ -109,7 +109,6 @@
        var question = newQuestion;
         var response = {
             "country" : newQuestion.country,
-            "questionId" : newQuestion.id,
             "answer" : answer,
             "timeRemaining": timeRemaining,
             "userId" : localStorage.id            
@@ -145,13 +144,13 @@
         var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
         return v.toString(16);
         });
-        localStorage.country = $('#country');
+        localStorage.country = $("#country").countrySelect("getSelectedCountryData").name;
         var registerObject = [];
 
        socket.emit('register',{
                    "id" : localStorage.id,
                    "username" : localStorage.username,
-                   "contry" : localStorage.country,
+                   "country" : localStorage.country,
                    "answers" : [],
                    "score"  :0
                     });
