@@ -55,7 +55,8 @@ io.on('connection', function (client) {
                 mongo.updateUserScore(answerData.userId, addedScore);
                 client.emit('score', addedScore);
             } else {
-                //do nothing, +0 points
+                //+0 points
+                client.emit('score', 0);
             }
         });
     });
