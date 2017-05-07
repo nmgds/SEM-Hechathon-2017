@@ -61,7 +61,9 @@ const UserSchema = new mongoose.Schema({
             type: Number
         }
     }],
-    score: {type: Number}
+    score: {
+        type: Number
+    }
 });
 
 
@@ -77,7 +79,7 @@ function getQuestion(country, ack) {
         } else {
             console.log(country);
             console.log(data);
-            ack(data[0].questions[0],country);
+            ack(data[0].questions[0], country);
         }
     })
 };
@@ -117,9 +119,9 @@ function getInfo(country, ack) {
     })
 };
 
-function getUserScores(user) {
+function getUserScore(user, ack) {
     User.find({
-        username: user
+        id: user
     }, function (err, data) {
         if (err) {
             console.log(err);
@@ -128,37 +130,33 @@ function getUserScores(user) {
 
 }
 
-function getAllUsers(ack){
-    Users.find({}, function(err, data){
-         if (err) {
+function getAllUsers(ack) {
+    Users.find({}, function (err, data) {
+        if (err) {
             console.log(err);
         } else ack(data);
     });
 }
-/*
 
-
-function checkAnswer(country, questionID, answer){
-    Round.find({country:country, questions.id:questionID}, function(err, data){
-        if(err){
-            console.log(err);
-        }
-        else{
-            if(data[0].questions.rightAnswer.equals(answer)){
-                //answer was right
-                return true;
+function updateUserScore(user, addedScore) {
+    getUserScore(user, function (currentScore) {
+        var newScore = currentScore + addedScore;
+        User.update({
+            id: user
+        }, {
+            score: newScore
+        }, function (err) {
+            if (err) {
+                console.log(err);
             }
-            else{
-                //answer was wrong
-                return false;
-                }
-            
-        }
+        });
     });
 }
-*/
 
 exports.getQuestion = getQuestion
 exports.getInfo = getInfo
 exports.saveUser = saveUser
 exports.addAnswer = addAnswer
+exports.getAllUsers = getAllUsers
+exports.getUserScore = getUserScore
+exports.updateUserScore = updateUserScore
