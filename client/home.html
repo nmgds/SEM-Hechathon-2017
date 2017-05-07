@@ -55,7 +55,7 @@
                 $('#Stream').attr("src", "//www.youtube.com/embed/no1v1-2HZ6g??rel=0?version=3&autoplay=1&start=" + time + "&controls=0&&showinfo=0&loop=1​&controls=0&fs=0&iv_load_policy=3&modestbranding=1&showinfo=0")
             }
 
-            var socket = io("localhost:8080")
+            var socket = io("leia.skip.chalmers.se:8080")
 
             socket.on("scoreboard", showScoreBoard)
             socket.on("info", showInfo)
