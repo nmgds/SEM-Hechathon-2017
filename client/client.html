@@ -23,9 +23,20 @@
 
 
     <script>
+    
+    var socket = io("localhost:8080");
+        
+    socket.on('score',function(scores){
+        setTimeout(function(){
+            waitingScreen(3,"",scores,0);
+        },5000);
+    });
+    socket.on('newQuestion',loadQuestion);
+
+    
     var timerCounter = 0;
     var answeredQuestion = false;
-    var socket = io("localhost:8080");
+
     function loadQuestion(newQuestion){
         answeredQuestion = false;
         clearPage();
@@ -158,22 +169,12 @@
                     }
                 },timeRemaining * 1000);
                 
-                setTimeout(function(){
-                    socket.on('score',function(scores){
-                    waitingScreen(3,"",scores,0);
-                });
-                },5000);
+
                 break;
 
             case 2:
                 $('#questionContainer').append('<h1> Ran out of time! </h1>');
                 $('#answersContainer').append('<img src="https://media0.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"></img>');
-                
-                setTimeout(function(){
-                    socket.on('score',function(scores){
-                    waitingScreen(3,"",scores,0);
-                    });
-                },5000);
                 break;
                 
             case 3:
@@ -186,7 +187,6 @@
         
     }
         
-    
 
     if(localStorage.username === null || localStorage.username === undefined){
         $("#country").countrySelect();
@@ -196,7 +196,7 @@
         
     $("#buttonRegister").click(function(){
         register();
-    });    
+    });
     
     
     </script>
