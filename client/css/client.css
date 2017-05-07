@@ -1,7 +1,6 @@
 body {
 	background-color: #053787;
 	color: white;
-	text-align: center;
 	margin-top: 100px;
 }
 
@@ -28,7 +27,12 @@ h1 {
 	margin-top: 30px;
 }
 
-#username {
+input[type="text"]{
+	font-size: 40px;
+	text-align: center;
+}
+
+ #username {
 	height: 100px;
 	width: 500px;
 	font-size: 50px;
@@ -46,7 +50,7 @@ h1 {
 
 select{
     display: block;
-    font-size: 50px;
+    font-size: 20px;
     color: white;
     background-color: darkgray;
     width: 500px;
@@ -55,5 +59,5 @@ select{
 }
 
 div{
-    align-content: center;
+    
 }
