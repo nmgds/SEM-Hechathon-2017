@@ -56,6 +56,7 @@
             }
 
             var socket = io("leia.skip.chalmers.se:8080")
+            //var socket = io("localhost:8080");
 
             socket.on("scoreboard", showScoreBoard)
             socket.on("info", showInfo)
