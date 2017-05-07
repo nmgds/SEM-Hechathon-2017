@@ -65,7 +65,7 @@
                 $('#ScoreBoard').css("visibility", "visible");
                 $('#score-table-body').html('');
                 $(data).each(function(i){
-                    $('#score-table-body').append('<tr><td>' + (i+1) + '</td><td>' + this.username + '</td><td>' + this.country + '</td><td>' + this.score + '</td>')
+                    $('#score-table-body').append('<tr><td>' + (i+1) + '</td><td>' + this.username + '</td><td><div class="country-select"><div class="flag '+this.country+'"></div></div></td><td>' + this.score + '</td>')
                 })
                 setTimeout(function(){
                     $('#ScoreBoard').css("visibility", "hidden");
