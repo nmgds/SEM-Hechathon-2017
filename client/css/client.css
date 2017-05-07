@@ -1,0 +1,32 @@
+body {
+	background-color: #053787;
+	color: white;
+	text-align: center;
+}
+
+#buttonRegister {
+	height: 100px;
+	width: 500px;
+	font-size: 50px;
+}
+
+/* #username {
+	height: 100px;
+	width: 500px;
+	font-size: 50px;
+	background-color: lightblue;
+} */
+
+#country{
+	height: 100px;
+	width: 500px;
+	font-size: 50px;
+	background-color: lightblue;
+}
+
+.defaultInput {
+	width: 800px;
+	height: 200px;
+}
+
+.country-select-input .flag {background-image: url('')}
