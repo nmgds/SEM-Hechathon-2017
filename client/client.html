@@ -4,23 +4,37 @@
     <title>Eurovision 2017 Quiz</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="socket.io.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+
     <link rel="stylesheet" href="./css/countrySelect.css">
+    <link rel="stylesheet" href="./css/client.css">
     
     <script src="./js/countrySelect.min.js"></script>
 
     
 </head>
 <body>
-    <div id></div>
-    <div id="questionContainer">
-        <h1 id=questionPlace>Enter your name!</h1>
-    </div>
-    <div id="answersContainer">
-        <input type="text" id="username"></input>
-        <input type="text" id="country"></input>
-        <button id=buttonRegister>Register</button>
-    </div>
+    <div class="container">
 
+        <div class="row">
+            <div id="questionContainer">
+                <img src="./img/logo.svg">
+            </div>
+        </div>
+        
+        <div id="answersContainer" class="row">
+            <div>
+                <input type="text" id="username" class="defaultInput"></input>
+            </div>
+            <div>
+                <input type="text" id="country" class="defaultInput"></input>
+            </div>
+            <div>
+                <button class="waves-effect waves-light btn" id=buttonRegister>Register</button>
+            </div>
+        </div>
+
+    </div>
 
     <script>
     
@@ -44,10 +58,10 @@
         console.log(newQuestion);
         var question = newQuestion;
         var answers = '<ol class="divAnswers">\
-        <li><button class="answer1" id="answer0">'+ question.answers[0] +'</button></li>\
-        <li><button class="answer2" id="answer1">'+ question.answers[1] +'</button></li>\
-        <li><button class="answer3" id="answer2">'+ question.answers[2] +'</button></li>\
-        <li><button class="answer4" id="answer3">'+ question.answers[3] +'</button></li>\
+        <li><button class="waves-effect waves-light btn" id="answer0">'+ question.answers[0] +'</button></li>\
+        <li><button class="waves-effect waves-light btn" id="answer1">'+ question.answers[1] +'</button></li>\
+        <li><button class="waves-effect waves-light btn" id="answer2">'+ question.answers[2] +'</button></li>\
+        <li><button class="waves-effect waves-light btn" id="answer3">'+ question.answers[3] +'</button></li>\
         </ol>';
         $('#answersContainer').append(answers);
         //fix
@@ -173,7 +187,7 @@
 
             case 2:
                 $('#questionContainer').append('<h1> Ran out of time! </h1>');
-                $('#answersContainer').append('<img src="https://media0.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"></img>');
+                $('#answersContainer').append('<img src="./img/load.gif"></img>');
                 break;
                 
             case 3:
