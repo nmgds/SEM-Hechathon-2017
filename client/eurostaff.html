@@ -20,7 +20,7 @@
                     <th></th>
                     <th>Country</th>
                     <th>Question</th>
-                    <th>Info</th>
+                    <th>Jump</th>
                     <th>Scoreboard</th>
                 </tr>
             </thead>
@@ -35,13 +35,17 @@
     <script>
         
     var socket = io("leia.skip.chalmers.se:8080");
-    //    var socket = io("localhost:8080");
+      // var socket = io("localhost:8080");
         function sendQuestionAnswer(country) {
             socket.emit('question', country);
         }
 
         function requestInfo(country) {
             socket.emit('info', country);
+        }
+        
+        function jumpTime(time){
+            io.sockets.emit('jump', time);
         }
 
         function showScore(country) {
@@ -50,12 +54,16 @@
 
         var countryList = ["Armenia", "Australia", "Austria", "Azerbaijan", "Belgiun", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "France", "Georgia", "Germany", "Hungary", "Israel", "Italy", "Latvia", "Lithuania", "Malta", "Netherlands", "Poland", "Russia", "Serbia", "Spain", "Sweden", "Ukraine", "United Kingdom"];
         var countryPrefix = ["am", "au", "at", "az", "be", "bg", "hr", "cy", "cz", "fr", "ge","de","hu", "il", "it", "lv", "lt", "mt", "nl", "pl", "ru", "rs", "es", "se", "ua", "gb"];
+        
+        var countryListShort = ["Azerbaijan", "Belgium", "Ukraine"];
+        var countryPrefixShort = ["az", "be", "ua"];
+        var countryTimeShort = [1687, 985, 6016]
 
         var list = "";
-        for (var i = 0; i < countryList.length; i++) {
-            var country = countryList[i];
-            var countryFlag = countryPrefix[i];
-            list = list + '<tr><td>' + i + '</td><td><div class="country-select"><div class="flag '+countryFlag+'"></div></div></td><td>' + country + '</td><td><a class="waves-effect waves-light btn" id="q' + country + '">Question</a></td><td><a class="waves-effect waves-light btn" id="i' + country + '">Info</a></td><td><a class="waves-effect waves-light btn" id="s' + country + '">Score</a></td></tr>';
+        for (var i = 0; i < countryListShort.length; i++) {
+            var country = countryListShort[i];
+            var countryFlag = countryPrefixShort[i];
+            list = list + '<tr><td>' + i + '</td><td><div class="country-select"><div class="flag '+countryFlag+'"></div></div></td><td>' + country + '</td><td><a class="waves-effect waves-light btn" id="q' + country + '">Question</a></td><td><a class="waves-effect waves-light btn" id="j' + country + '">Jump</a></td><td><a class="waves-effect waves-light btn" id="s' + country + '">Score</a></td></tr>';
         }
 
         $("#countryList").append(list);
@@ -64,13 +72,18 @@
             $("#q" + country).click(function() {
                 sendQuestionAnswer(country);
             });
-            $("#i" + country).click(function() {
-                requestInfo(country);
+            $("#j" + country).click(function() {
+                jumpTime(countryTimeShort[index]);
             });
             $("#s" + country).click(function() {
                 showScore(country);
             });
         });
+    
+        
+        $("#iAzerbaijan").click(function(){
+            
+        })
 
     </script>
 </body>
